@@ -21,6 +21,8 @@ app.get("/", (req, res)=> {
     res.send("This is Felicidad API.")
 })
 
-app.listen(3000, ()=>{
+const PORT = 8000
+
+app.listen(process.env.PORT || PORT, ()=>{
     console.log("Server running on port 3000...")
 })
