@@ -13,9 +13,13 @@ initializeDBConnect()
 // Routers
 const posts = require("./routers/posts.v1.router")
 const users = require('./routers/users.v1.router')
+const signup = require('./routers/signup.router')
+const login = require('./routers/login.router')
 
 app.use("/posts", posts)
 app.use("/users", users)
+app.use("/signup", signup)
+app.use("/login", login)
 
 app.get("/", (req, res)=> {
     res.send("This is Felicidad API.")
@@ -24,5 +28,5 @@ app.get("/", (req, res)=> {
 const PORT = 8000
 
 app.listen(process.env.PORT || PORT, ()=>{
-    console.log("Server running on port 3000...")
+    console.log(`Server running on port ${PORT}...`)
 })

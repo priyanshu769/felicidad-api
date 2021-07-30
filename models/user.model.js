@@ -5,29 +5,35 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: 'Cannot create user without name.',
   },
+  email: {
+    type: String,
+    reuired: 'Cannot create user without a valid email.'
+  },
   username: {
     type: String,
+    min: 3,
+    max: 15,
     required: 'Cannot create user without username.',
+  },
+  profilePic: {
+    type: String
   },
   bio: {
     type: String,
-    required: 'Cannot create user without bio.',
+    max: 50
   },
   password: {
     type: String,
+    min: 6,
     required: 'Cannot create user without password.',
-  },
-  following: {
-    type: Array,
-    required: 'Cannot create user without following array.',
   },
   followers: {
     type: Array,
-    required: 'Cannot create user without following array.',
+    default: []
   },
-  posts: {
+  following: {
     type: Array,
-    required: 'Cannot create user without following array.',
+    default: []
   },
 })
 
