@@ -93,4 +93,27 @@ router.route('/:id/unfollow').post(async (req, res) => {
   } else res.status(403).json({ message: "You can't unfollow yourself." })
 })
 
+router.param('username', async (req, res, next, username) => {
+  try {
+    const user = await User.findOne({username: username})
+    if (!user) {
+      return res.json({ success: false, message: 'Unable to get user.' })
+    }
+    req.user = user
+    return next()
+  } catch (error) {
+    res.json({
+      success: false,
+      message: 'Error while retrieving user',
+      errorMessage: error.message,
+    })
+  }
+})
+router
+  .route('/u/:username')
+  .get(async (req, res) => {
+    const { password, email, __v, ...restUserData } = req.user._doc
+    res.json({ success: true, restUserData })
+  })
+
 module.exports = router
