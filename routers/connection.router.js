@@ -9,8 +9,8 @@ const verifyUserLoggedIn = require('../middlewares/verifyUserLoggedIn.middleware
 
 router.use(verifyUserLoggedIn)
 
-router.route('/:id/followers').get(async(req, res)=> {
-    const user = await User.findOne({_id: req.params.id})
+router.route('/:username/followers').get(async(req, res)=> {
+    const user = await User.findOne({username: req.params.username})
     const userFollowers = await Promise.all(user.followers.map(followerId => {
         return User.findOne({_id: followerId})
     }))
@@ -20,8 +20,8 @@ router.route('/:id/followers').get(async(req, res)=> {
     })
     res.json({success: true, followersList})
 })
-router.route('/:id/following').get(async(req, res)=> {
-    const user = await User.findOne({_id: req.params.id})
+router.route('/:username/following').get(async(req, res)=> {
+    const user = await User.findOne({username: req.params.username})
     const userFollowing = await Promise.all(user.following.map(followerId => {
         return User.findOne({_id: followerId})
     }))
