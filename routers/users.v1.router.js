@@ -64,7 +64,7 @@ router
     })
   })
 
-router.route('/:id/follow').post(async (req, res) => {
+router.route('/:id/follow').get(async (req, res) => {
   if (req.body.userId !== req.params.id) {
     const userToFollow = req.user
     const currentUser = await User.findById(req.userId.userId)
@@ -77,7 +77,7 @@ router.route('/:id/follow').post(async (req, res) => {
     }
   } else res.status(403).json({ message: "You can't follow yourself." })
 })
-router.route('/:id/unfollow').post(async (req, res) => {
+router.route('/:id/unfollow').get(async (req, res) => {
   if (req.body.userId !== req.params.id) {
     const userToUnfollow = req.user
     const currentUser = await User.findById(req.userId.userId)
