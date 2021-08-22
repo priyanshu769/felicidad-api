@@ -8,7 +8,7 @@ router
   .route('/')
   .get(async (req, res) => {
     try {
-      const posts = await Post.find({})
+      const posts = await Post.find({}).populate("user", ["name", "username", "profilePic"]).exec()
       res.json({ success: true, posts })
     } catch (error) {
       res.json({

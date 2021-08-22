@@ -16,7 +16,8 @@ router.route('/').post(async(req, res)=> {
             const isPasswordCorrect = await bcrypt.compare(password, loginUser.password)
             if (isPasswordCorrect){
                 const token = jwt.sign({userId: loginUser._id}, secretKey)
-                return res.json({success: true, loginUser, token})
+                const {password, __v, ...restUserData} = loginUser._doc
+                return res.json({success: true, loginUser: restUserData, token})
             }
             else res.json({success: false, message: "Incorrect Password."})
         }

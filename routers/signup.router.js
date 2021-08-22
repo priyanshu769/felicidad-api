@@ -33,7 +33,8 @@ router.route('/').post(async (req, res) => {
       verifyNewUser.password = await bcrypt.hash(verifyNewUser.password, salt)
       const savedNewUser = await verifyNewUser.save()
       const token = jwt.sign({ userId: savedNewUser._id }, secretKey)
-      res.json({ success: true, savedNewUser, token })
+      const {password, __v, ...restUserData} = savedNewUser._doc
+      res.json({ success: true, savedNewUser: restUserData, token })
     } catch (error) {
       res.json({
         success: false,
