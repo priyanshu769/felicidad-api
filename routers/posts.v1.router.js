@@ -23,7 +23,8 @@ router
     try {
       const postToAdd = new Post(addPost)
       const postAdded = await postToAdd.save()
-      res.json({ success: true, postAdded })
+      const newPostWithUserCred = await postAdded.populate("user", ["name", "username", "profilePic"]).execPopulate()
+      res.json({ success: true, postAdded: newPostWithUserCred })
     } catch (error) {
       res.json({
         success: false,
