@@ -52,4 +52,17 @@ router
   }
   })
 
+  router.route('/:postId/delete')
+  .post(async(req, res) => {
+    try{
+      const postToDelete = await Post.findOne({_id: req.params.postId})
+      if(postToDelete) {
+        const postDeleted = await Post.findOneAndDelete({_id: req.params.postId})
+        res.json({success: true, postDeleted })
+      } else res.json({success: false, message: 'Post not found'})
+    }catch(error) {
+      res.json({success: false, message: "Unable to delete post", errorMessage: error.message})
+    }
+  })
+
 module.exports = router
