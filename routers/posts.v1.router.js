@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const { extend } = require('lodash')
 
 // Models
 const { Post } = require('../models/post.model')
@@ -32,6 +33,23 @@ router
         errorMessage: error.message,
       })
     }
+  })
+
+  router.route('/:postId/like')
+  .post(async(req, res) => {
+    try{
+      let postToUpdate = await Post.findById(req.params.postId)
+      if(postToUpdate){
+      const likes = {likes: postToUpdate.likes + 1}
+      console.log(likes)
+      postToUpdate = extend(postToUpdate, likes)
+      const postUpdated = await postToUpdate.save()
+      console.log(postUpdated)
+      res.json({success: true, postUpdated})
+    } else res.json({success: false, message: "Post not found"})
+  } catch(error) {
+    res.json({success: false, message: "Some error occured while liking", errorMessage: error.message})
+  }
   })
 
 module.exports = router
