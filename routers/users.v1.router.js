@@ -13,12 +13,25 @@ router.use(verifyUserLoggedIn)
 
 router.route('/').get(async (req, res) => {
   try {
-    let users = await User.find({}, {name: 1, username: 1, profilePic: 1})
-    res.json({ success: true, users })
+    const user = await User.findOne({ _id: req.userId.userId })
+    const {password, __v, ...restUserData} = user._doc
+    res.json({ success: true, user: restUserData })
   } catch (error) {
     res.json({
       success: false,
       message: 'Unable to fetch user.',
+      errorMessage: error.message,
+    })
+  }
+})
+router.route('/all').get(async (req, res) => {
+  try {
+    const users = await User.find({}, {name: 1, username: 1, profilePic: 1})
+    res.json({ success: true, users })
+  } catch (error) {
+    res.json({
+      success: false,
+      message: 'Unable to fetch users.',
       errorMessage: error.message,
     })
   }
