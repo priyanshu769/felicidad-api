@@ -13,9 +13,8 @@ router.use(verifyUserLoggedIn)
 
 router.route('/').get(async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.userId.userId })
-    const {password, __v, ...restUserData} = user._doc
-    res.json({ success: true, user: restUserData })
+    let users = await User.find({}, {name: 1, username: 1, profilePic: 1})
+    res.json({ success: true, users })
   } catch (error) {
     res.json({
       success: false,
