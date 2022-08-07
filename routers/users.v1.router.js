@@ -74,7 +74,7 @@ router
         let user = req.user
         user = extend(user, updateUser)
         user = await user.save()
-        const { password, email, __v, ...restUserData } = user._doc
+        const { password, __v, ...restUserData } = user._doc
         res.json({ success: true, user: restUserData })
       } else res.send({ success: false, message: 'Incorrect Password' })
     }
