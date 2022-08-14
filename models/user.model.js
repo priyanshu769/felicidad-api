@@ -28,11 +28,15 @@ const UserSchema = new mongoose.Schema({
     required: 'Cannot create user without password.',
   },
   followers: {
-    type: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     default: []
   },
   following: {
-    type: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    default: []
+  },
+  bookmarks: {
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
     default: []
   },
 })
