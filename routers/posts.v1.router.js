@@ -47,7 +47,7 @@ router.route('/:postId/like')
         } else {
           const postUpdated = await postToUpdate.updateOne({ $pull: { likes: likedByUser } })
           res
-            .status(403)
+            .status(200)
             .json({ success: true, message: 'Your like removed from post.', postUpdated })
         }
       } else res.json({ success: false, message: "Post not found" })
@@ -66,6 +66,20 @@ router.route('/:postId/delete')
       } else res.json({ success: false, message: 'Post not found' })
     } catch (error) {
       res.json({ success: false, message: "Unable to delete post", errorMessage: error.message })
+    }
+  })
+router.route('/:postId/edit')
+  .post(async (req, res) => {
+    const editPost = req.body
+    try {
+      const postToEdit = await Post.findOne({ _id: req.params.postId })
+      if (postToEdit) {
+        let postEdited = extend(postToEdit, editPost)
+        postEdited = await postEdited.save()
+        res.status(200).json({ success: true, postEdited })
+      } else res.json({ success: false, message: 'Post not found' })
+    } catch (error) {
+      res.json({ success: false, message: "Unable to update post", errorMessage: error.message })
     }
   })
 
