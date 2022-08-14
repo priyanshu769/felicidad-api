@@ -35,33 +35,37 @@ router
     }
   })
 
-  router.route('/:postId/like')
-  .post(async(req, res) => {
-    try{
+router.route('/:postId/like')
+  .post(async (req, res) => {
+    const likedByUser = req.body.likedByUser
+    try {
       let postToUpdate = await Post.findById(req.params.postId)
-      if(postToUpdate){
-      const likes = {likes: postToUpdate.likes + 1}
-      console.log(likes)
-      postToUpdate = extend(postToUpdate, likes)
-      const postUpdated = await postToUpdate.save()
-      console.log(postUpdated)
-      res.json({success: true, postUpdated})
-    } else res.json({success: false, message: "Post not found"})
-  } catch(error) {
-    res.json({success: false, message: "Some error occured while liking", errorMessage: error.message})
-  }
+      if (postToUpdate) {
+        if (!postToUpdate.likes.includes(likedByUser)) {
+          const postUpdated = await postToUpdate.updateOne({ $push: { likes: likedByUser } })
+          res.status(200).json({ success: true, message: 'You liked the post.', postUpdated })
+        } else {
+          const postUpdated = await postToUpdate.updateOne({ $pull: { likes: likedByUser } })
+          res
+            .status(403)
+            .json({ success: true, message: 'Your like removed from post.', postUpdated })
+        }
+      } else res.json({ success: false, message: "Post not found" })
+    } catch (error) {
+      res.json({ success: false, message: "Some error occured while liking", errorMessage: error.message })
+    }
   })
 
-  router.route('/:postId/delete')
-  .post(async(req, res) => {
-    try{
-      const postToDelete = await Post.findOne({_id: req.params.postId})
-      if(postToDelete) {
-        const postDeleted = await Post.findOneAndDelete({_id: req.params.postId})
-        res.json({success: true, postDeleted })
-      } else res.json({success: false, message: 'Post not found'})
-    }catch(error) {
-      res.json({success: false, message: "Unable to delete post", errorMessage: error.message})
+router.route('/:postId/delete')
+  .post(async (req, res) => {
+    try {
+      const postToDelete = await Post.findOne({ _id: req.params.postId })
+      if (postToDelete) {
+        const postDeleted = await Post.findOneAndDelete({ _id: req.params.postId })
+        res.json({ success: true, postDeleted })
+      } else res.json({ success: false, message: 'Post not found' })
+    } catch (error) {
+      res.json({ success: false, message: "Unable to delete post", errorMessage: error.message })
     }
   })
 

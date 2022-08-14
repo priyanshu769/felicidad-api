@@ -6,8 +6,8 @@ const PostSchema = new mongoose.Schema({
     required: 'Cannot add post without caption',
   },
   likes: {
-    type: Number,
-    required: 'Cannot add post without defining likes',
+    type: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+    default: []
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
