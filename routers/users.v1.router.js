@@ -113,10 +113,10 @@ router.route('/:id/unfollow').get(async (req, res) => {
         .json({ success: true, message: 'User has been unfollowed' })
     } else {
       res
-        .status(403)
+        .status(200)
         .json({ success: true, message: "You don't follow this user" })
     }
-  } else res.status(403).json({ message: "You can't unfollow yourself." })
+  } else res.json({ message: "You can't unfollow yourself." })
 })
 
 router.param('username', async (req, res, next, username) => {
